@@ -1,0 +1,47 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+    <head>
+        <title>Welcome to the Spring MVC Quickstart application! Get started quickly by signing up!</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <link href="/resources/css/bootstrap.min.css" rel="stylesheet" media="screen" th:href="@{/resources/css/bootstrap.min.css}"/>
+        <link href="/resources/css/core.css" rel="stylesheet" media="screen" th:href="@{/resources/css/core.css}" />
+        <script src="/resources/js/bootstrap.min.js" th:src="@{/resources/js/bootstrap.min.js}"></script>
+    </head>
+    <body>
+        <div th:replace="fragments/header :: header">
+            <!-- ============================================================================ -->
+            <!-- This content is only used for static prototyping purposes (natural templates)-->
+            <!-- and is therefore entirely optional, as this markup fragment will be included -->
+            <!-- from "fragments/header.html" at runtime.                                     -->
+            <!-- ============================================================================ -->
+            <div class="navbar navbar-inverse navbar-fixed-top">
+                <div class="container">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="#">titus site</a>
+                    </div>
+                    <div class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav">
+                            <li class="active"><a href="#">Home</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="hero-unit">
+                <h3 th:text="#{welcome.welcome(${name})}">John Apricot, welcome to my Spring+thymeleaf app!</h3>
+                <p>
+                    <span th:text="${#authentication.name}">qq</span>, welcome to the Spring MVC Quickstart application!
+                    Get started quickly by signing up.
+                </p>
+                <p th:if="${#authorization.expression('!isAuthenticated()')}">
+                    <a href="/signup" th:href="@{/signup}" class="btn btn-lg btn-info">Sign up</a>
+                </p>
+            </div>
+            <div th:replace="fragments/footer :: footer">&copy; 2013 The Static Templates</div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Jan 10, 2015 9:31:58 PM by Hibernate Tools 3.6.0 -->
+<hibernate-mapping>
+    <class name="com.mycompany.thymeleafspringapp.model.UserGroupsPt" table="user_groups_pt" schema="trdr">
+        <id name="userGroupsPtId" type="long">
+            <column name="user_groups_pt_id" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="users" class="com.mycompany.thymeleafspringapp.model.Users" fetch="select">
+            <column name="user_id" />
+        </many-to-one>
+        <many-to-one name="userGroups" class="com.mycompany.thymeleafspringapp.model.UserGroups" fetch="select">
+            <column name="user_group_id" />
+        </many-to-one>
+        <property name="startDte" type="date">
+            <column name="start_dte" length="13" />
+        </property>
+        <property name="endDte" type="date">
+            <column name="end_dte" length="13" />
+        </property>
+    </class>
+</hibernate-mapping>

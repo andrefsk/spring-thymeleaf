@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Jan 10, 2015 9:31:58 PM by Hibernate Tools 3.6.0 -->
+<hibernate-mapping>
+    <class name="com.mycompany.thymeleafspringapp.model.Users" table="users" schema="trdr">
+        <id name="userId" type="long">
+            <column name="user_id" />
+            <generator class="assigned" />
+        </id>
+        <property name="username" type="string">
+            <column name="username" length="50" not-null="true" unique="true" />
+        </property>
+        <property name="password" type="string">
+            <column name="password" length="100" not-null="true" />
+        </property>
+        <property name="email" type="string">
+            <column name="email" length="50" not-null="true" unique="true" />
+        </property>
+        <property name="enabled" type="java.lang.Boolean">
+            <column name="enabled" />
+        </property>
+        <set name="userGroupsPts" table="user_groups_pt" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="user_id" />
+            </key>
+            <one-to-many class="com.mycompany.thymeleafspringapp.model.UserGroupsPt" />
+        </set>
+        <set name="userRolesPts" table="user_roles_pt" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="user_id" not-null="true" />
+            </key>
+            <one-to-many class="com.mycompany.thymeleafspringapp.model.UserRolesPt" />
+        </set>
+    </class>
+</hibernate-mapping>
