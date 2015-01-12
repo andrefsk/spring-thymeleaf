@@ -4,6 +4,7 @@ import com.mycompany.thymeleafspringapp.dao.UsersDAO;
 import com.mycompany.thymeleafspringapp.model.Users;
 import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
  * @author andrey
  */
 @Service
+@Profile({"test", "production"})
 public class UserService implements UserDetailsService {
 
     @Autowired

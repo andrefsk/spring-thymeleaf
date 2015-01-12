@@ -15,6 +15,7 @@ import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Repository;
  * @author andrey
  */
 @Repository
+@Profile({"test", "production"})
 public class UsersDAOImpl implements UsersDAO {
 
     Logger log = LoggerFactory.getLogger("UsersDAOImpl");

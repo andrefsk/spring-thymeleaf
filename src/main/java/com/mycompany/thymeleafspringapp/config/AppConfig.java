@@ -15,6 +15,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.Ordered;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -56,8 +57,6 @@ public class AppConfig extends WebMvcConfigurerAdapter {
         return engine;
     }
 
-    
-
     @Bean
     public ThymeleafViewResolver getViewResolver() {
         ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
@@ -66,6 +65,7 @@ public class AppConfig extends WebMvcConfigurerAdapter {
     }
 
     @Bean
+    @Profile({"test", "production"})
     public SessionFactory getSessionFactory() {
 
         org.hibernate.cfg.Configuration configuration = new org.hibernate.cfg.Configuration();
