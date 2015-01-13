@@ -12,8 +12,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  *
@@ -28,7 +26,7 @@ public class SecurityConfigDev extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/resources/**", "/signup", "/home", "/").permitAll()
+                .antMatchers("/resources/**", "/signup", "/home", "/","/connect/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -37,7 +35,11 @@ public class SecurityConfigDev extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout()
                 .logoutUrl("/logout")
-                .permitAll();
+                .permitAll()
+                .and()
+                .rememberMe();
+             //   .and()
+             //   .apply(new SpringSocialConfigurer());
     }
 
     @Autowired
