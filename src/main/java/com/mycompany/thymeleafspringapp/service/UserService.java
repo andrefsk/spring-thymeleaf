@@ -40,6 +40,10 @@ public class UserService implements UserDetailsService {
         }
         return new UserDetailsService(user);
     }
+    
+    public Users createNewUser(String username,String pass, String email){
+        return usersDAO.createUser(username, pass, email);
+    }
 
     private static final class UserDetailsService extends Users implements UserDetails {
 
