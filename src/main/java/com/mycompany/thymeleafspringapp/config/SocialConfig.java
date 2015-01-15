@@ -5,16 +5,20 @@
  */
 package com.mycompany.thymeleafspringapp.config;
 
-import com.mycompany.thymeleafspringapp.model.Users;
 import com.mycompany.thymeleafspringapp.service.SimpleSigninAdapter;
-import com.mycompany.thymeleafspringapp.service.UserService;
+import java.util.ArrayList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.core.env.Environment;
-import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.social.UserIdSource;
 import org.springframework.social.config.annotation.ConnectionFactoryConfigurer;
 import org.springframework.social.config.annotation.EnableSocial;
@@ -39,8 +43,11 @@ import org.springframework.social.security.AuthenticationNameUserIdSource;
 @Configuration
 @EnableSocial
 public class SocialConfig implements SocialConfigurer {
+
+    Logger log = LoggerFactory.getLogger("SocialConfig");
+
     @Autowired
-    UserService usersService;
+    InMemoryUserDetailsManager auth;
 
     @Override
     public void addConnectionFactories(ConnectionFactoryConfigurer cfc, Environment e) {
@@ -54,13 +61,20 @@ public class SocialConfig implements SocialConfigurer {
 
     @Override
     public UsersConnectionRepository getUsersConnectionRepository(ConnectionFactoryLocator cfl) {
-        InMemoryUsersConnectionRepository userRep= new InMemoryUsersConnectionRepository(cfl);
+        InMemoryUsersConnectionRepository userRep = new InMemoryUsersConnectionRepository(cfl);
         userRep.setConnectionSignUp(new ConnectionSignUp() {
 
             @Override
             public String execute(Connection<?> cnctn) {
-                UserProfile profile = cnctn.fetchUserProfile();
-                usersService.createNewUser(profile., null, null)
+                try {
+                    UserProfile profile = cnctn.fetchUserProfile();
+                    String email=cnctn.fetchUserProfile().getEmail();
+                    auth.createUser(new User(profile.getName(), profile.getName(), new ArrayList<GrantedAuthority>()));
+                    return profile.getName();
+                } catch (Exception ex) {
+                    log.error("SIGNUP", ex.toString(), ex);
+                    throw new RuntimeException(ex);
+                }
                 
             }
         });
@@ -68,6 +82,7 @@ public class SocialConfig implements SocialConfigurer {
     }
 
     @Bean
+
     public ConnectController connectController(
             ConnectionFactoryLocator connectionFactoryLocator,
             ConnectionRepository connectionRepository) {
@@ -102,7 +117,7 @@ public class SocialConfig implements SocialConfigurer {
     @Scope(value = "singleton", proxyMode = ScopedProxyMode.INTERFACES)
     public UsersConnectionRepository usersConnectionRepository() {
         return getUsersConnectionRepository(connectionFactoryLocator());
-        
+
     }
 
 }

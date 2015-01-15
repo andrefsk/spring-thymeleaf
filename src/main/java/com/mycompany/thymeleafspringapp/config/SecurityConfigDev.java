@@ -5,13 +5,16 @@
  */
 package com.mycompany.thymeleafspringapp.config;
 
+import java.util.Properties;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 /**
  *
@@ -26,7 +29,7 @@ public class SecurityConfigDev extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/resources/**", "/signup", "/home", "/","/signin/**").permitAll()
+                .antMatchers("/resources/**", "/signup", "/home", "/", "/signin/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -39,14 +42,24 @@ public class SecurityConfigDev extends WebSecurityConfigurerAdapter {
                 .and()
                 .rememberMe();
              //   .and()
-             //   .apply(new SpringSocialConfigurer());
+        //   .apply(new SpringSocialConfigurer());
     }
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().withUser("user").password("pendos90").roles("USER");
-        auth.inMemoryAuthentication().withUser("admin").password("admin").roles("ADMIN");
-        auth.inMemoryAuthentication().withUser("dba").password("123456").roles("DBA");
+        
+        auth.userDetailsService(inMemoryUserDetailsManager());
+//        auth.inMemoryAuthentication().withUser("user").password("pendos90").roles("USER");
+//        auth.inMemoryAuthentication().withUser("admin").password("admin").roles("ADMIN");
+//        auth.inMemoryAuthentication().withUser("dba").password("123456").roles("DBA");
+
+    }
+
+    @Bean
+    public InMemoryUserDetailsManager inMemoryUserDetailsManager() {
+        final Properties users = new Properties();
+        users.put("user", "pass,ROLE_USER,enabled"); //add whatever other user you need
+        return new InMemoryUserDetailsManager(users);
     }
 
 }
