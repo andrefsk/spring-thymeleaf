@@ -5,8 +5,6 @@
  */
 package com.mycompany.thymeleafspringapp.config;
 
-import com.mycompany.thymeleafspringapp.dao.UsersDAO;
-import com.mycompany.thymeleafspringapp.dao.UsersDAOImpl;
 import java.util.HashSet;
 import java.util.Set;
 import org.hibernate.SessionFactory;
@@ -36,6 +34,9 @@ import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 @EnableWebMvc
 @ComponentScan("com.mycompany.thymeleafspringapp")
 public class AppConfig extends WebMvcConfigurerAdapter {
+
+    public AppConfig() {
+    }
 
     @Bean
     SpringResourceTemplateResolver getTemplateResolver() {
