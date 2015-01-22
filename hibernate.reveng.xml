@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd">
+<hibernate-reverse-engineering>
+  <schema-selection match-catalog="trdr" match-schema="TRDR"/>
+  <table-filter match-name="deals"/>
+  <table-filter match-name="instruments"/>
+  <table-filter match-name="screenshots"/>
+  <table-filter match-name="users"/>
+  <table-filter match-name="tags"/>
+</hibernate-reverse-engineering>

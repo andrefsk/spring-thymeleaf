@@ -8,9 +8,9 @@
     <property name="hibernate.connection.username">admin</property>
     <property name="hibernate.connection.password">admin</property>
     <mapping resource="com/mycompany/thymeleafspringapp/model/Users.hbm.xml"/>
-    <mapping resource="com/mycompany/thymeleafspringapp/model/UserGroupsPt.hbm.xml"/>
-    <mapping resource="com/mycompany/thymeleafspringapp/model/UserGroups.hbm.xml"/>
-    <mapping resource="com/mycompany/thymeleafspringapp/model/UserRoles.hbm.xml"/>
-    <mapping resource="com/mycompany/thymeleafspringapp/model/UserRolesPt.hbm.xml"/>
+    <mapping resource="com/mycompany/thymeleafspringapp/model/Tags.hbm.xml"/>
+    <mapping resource="com/mycompany/thymeleafspringapp/model/Deals.hbm.xml"/>
+    <mapping resource="com/mycompany/thymeleafspringapp/model/Instruments.hbm.xml"/>
+    <mapping resource="com/mycompany/thymeleafspringapp/model/Screenshots.hbm.xml"/>
   </session-factory>
 </hibernate-configuration>
