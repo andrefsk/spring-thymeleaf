@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Jan 22, 2015 10:22:49 PM by Hibernate Tools 3.6.0 -->
+<hibernate-mapping>
+    <class name="com.mycompany.thymeleafspringapp.model.Deals" table="deals" schema="trdr">
+        <id name="dealId" type="long">
+            <column name="deal_id" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="instruments" class="com.mycompany.thymeleafspringapp.model.Instruments" fetch="select">
+            <column name="instrument_id" not-null="true" />
+        </many-to-one>
+        <many-to-one name="users" class="com.mycompany.thymeleafspringapp.model.Users" fetch="select">
+            <column name="user_id" not-null="true" />
+        </many-to-one>
+        <property name="longDeal" type="boolean">
+            <column name="long_deal" not-null="true" />
+        </property>
+        <property name="priceOpen" type="double">
+            <column name="price_open" scale="0" not-null="true" />
+        </property>
+        <property name="priceClose" type="java.lang.Double">
+            <column name="price_close" scale="0" />
+        </property>
+        <property name="dateOpen" type="date">
+            <column name="date_open" length="13" />
+        </property>
+        <property name="dateClose" type="date">
+            <column name="date_close" length="13">
+                <comment>date_close</comment>
+            </column>
+        </property>
+        <property name="description" type="string">
+            <column name="description" length="4000" />
+        </property>
+        <set name="screenshotses" table="screenshots" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="deal_id" not-null="true" />
+            </key>
+            <one-to-many class="com.mycompany.thymeleafspringapp.model.Screenshots" />
+        </set>
+        <set name="tagses" table="tags" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="deal_id" not-null="true" />
+            </key>
+            <one-to-many class="com.mycompany.thymeleafspringapp.model.Tags" />
+        </set>
+    </class>
+</hibernate-mapping>
