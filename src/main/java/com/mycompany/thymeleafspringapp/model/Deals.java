@@ -47,6 +47,7 @@ public class Deals  implements java.io.Serializable {
        this.description = description;
        this.screenshotses = screenshotses;
        this.tagses = tagses;
+       
     }
    
     public long getDealId() {

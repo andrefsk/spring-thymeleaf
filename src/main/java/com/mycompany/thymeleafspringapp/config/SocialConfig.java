@@ -6,6 +6,10 @@
 package com.mycompany.thymeleafspringapp.config;
 
 import com.mycompany.thymeleafspringapp.service.SimpleSigninAdapter;
+import com.mycompany.thymeleafspringapp.service.UserService;
+import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.sql.SQLFeatureNotSupportedException;
 import java.util.ArrayList;
 import javax.sql.DataSource;
 import org.slf4j.Logger;
@@ -15,6 +19,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -166,6 +171,8 @@ public class SocialConfig implements SocialConfigurer {
 
         @Autowired
         private DataSource dataSource;
+        @Autowired
+        UserService userService;
         
         @Autowired
         TextEncryptor encryptor;
@@ -181,7 +188,7 @@ public class SocialConfig implements SocialConfigurer {
                     try {
                         UserProfile profile = cnctn.fetchUserProfile();
                         String email = cnctn.fetchUserProfile().getEmail();
-                        auth.createUser(new User(email, "", new ArrayList<GrantedAuthority>()));
+                        userService.createNewUser(profile.getName(), null, email);
                         return profile.getName();
                     } catch (Exception ex) {
                         log.error("SIGNUP", ex.toString(), ex);
@@ -196,6 +203,12 @@ public class SocialConfig implements SocialConfigurer {
         @Bean
         public TextEncryptor textEncryptor() {
             return Encryptors.queryableText("qq", "qq");
+        }
+        
+        @Bean
+        public DataSource getDataSource(){
+            DriverManagerDataSource ds = new DriverManagerDataSource("jdbc:postgresql://localhost:5432/trdr", "trdr", "trdr");
+            return ds;
         }
     }
 }
