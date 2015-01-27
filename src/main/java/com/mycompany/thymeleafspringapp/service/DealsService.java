@@ -28,4 +28,8 @@ public class DealsService {
     public Deals getDealById(long dealId){
         return dealsDAO.getDeal(dealId);
     }
+    
+    public byte[] getScreenshotById(long imgId){
+        return dealsDAO.getScreenshot(imgId);
+    }
 }

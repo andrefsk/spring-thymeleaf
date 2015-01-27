@@ -25,6 +25,7 @@ public interface DealsDAO {
     
     public List<Deals> getDeals(long userId);
     public Deals getDeal(long dealId);
+    public byte[] getScreenshot(long imgId);
     public void closeDeal(long dealId, BigDecimal closePrice, Date closeDate);
     public void closeDeal(Deals deal, BigDecimal closePrice, Date closeDate);
     public Deals createDeal(Instruments instr,Users user,DealDirection direction,BigDecimal openPrice, Date openDate,String descr, Set<Tags> tags,Set<Screenshots>screenshots);

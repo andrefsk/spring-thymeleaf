@@ -45,7 +45,7 @@ public class SecurityConfig{
         protected void configure(HttpSecurity http) throws Exception {
             http
                     .authorizeRequests()
-                    .antMatchers("/resources/**", "/signup", "/home", "/").permitAll()
+                    .antMatchers("/resources/**", "/signup", "/home", "/", "/signin/**").permitAll()
                     .anyRequest().authenticated()
                     .and()
                     .formLogin()

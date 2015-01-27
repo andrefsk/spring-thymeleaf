@@ -7,7 +7,8 @@ package com.mycompany.thymeleafspringapp.controller;
 
 import com.mycompany.thymeleafspringapp.model.Deals;
 import com.mycompany.thymeleafspringapp.service.DealsService;
-import javax.ws.rs.PathParam;
+import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,5 +31,12 @@ public class DealsController {
         Deals d = ds.getDealById(dealId);
         model.addAttribute("deal", d);
         return "viewDeal";
+    }
+    
+    @RequestMapping(value = "/deals/{dealid}/{imgid}", method = RequestMethod.GET)
+    public void getImage(@PathVariable(value = "imgid") long imgId,@PathVariable(value = "dealid") long dealId,HttpServletResponse response) throws IOException {
+        response.setContentType("image/jpeg, image/jpg, image/png, image/gif");
+        response.getOutputStream().write(ds.getScreenshotById(imgId));
+        response.getOutputStream().close();
     }
 }

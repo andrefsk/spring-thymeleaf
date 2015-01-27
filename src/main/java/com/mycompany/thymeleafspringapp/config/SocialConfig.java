@@ -7,9 +7,6 @@ package com.mycompany.thymeleafspringapp.config;
 
 import com.mycompany.thymeleafspringapp.service.SimpleSigninAdapter;
 import com.mycompany.thymeleafspringapp.service.UserService;
-import java.io.PrintWriter;
-import java.sql.SQLException;
-import java.sql.SQLFeatureNotSupportedException;
 import java.util.ArrayList;
 import javax.sql.DataSource;
 import org.slf4j.Logger;
@@ -22,7 +19,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
@@ -49,12 +45,10 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
  * @author andrey
  */
 @Configuration
-public class SocialConfig implements SocialConfigurer {
+@EnableWebMvc
+public abstract class SocialConfig implements SocialConfigurer {
 
     Logger log = LoggerFactory.getLogger("SocialConfig");
-
-    @Autowired
-    InMemoryUserDetailsManager auth;
 
     public SocialConfig() {
     }
@@ -69,29 +63,7 @@ public class SocialConfig implements SocialConfigurer {
     public UserIdSource getUserIdSource() {
         return new AuthenticationNameUserIdSource();
     }
-
-    @Override
-    public UsersConnectionRepository getUsersConnectionRepository(ConnectionFactoryLocator cfl) {
-        InMemoryUsersConnectionRepository userRep = new InMemoryUsersConnectionRepository(cfl);
-        userRep.setConnectionSignUp(new ConnectionSignUp() {
-
-            @Override
-            public String execute(Connection<?> cnctn) {
-                try {
-                    UserProfile profile = cnctn.fetchUserProfile();
-                    String email = cnctn.fetchUserProfile().getEmail();
-                    auth.createUser(new User(email, "", new ArrayList<GrantedAuthority>()));
-                    return profile.getName();
-                } catch (Exception ex) {
-                    log.error("SIGNUP", ex.toString(), ex);
-                    throw new RuntimeException(ex);
-                }
-
-            }
-        });
-        return userRep;
-    }
-
+    
     @Bean
     public ConnectController connectController(
             ConnectionFactoryLocator connectionFactoryLocator,
@@ -112,22 +84,6 @@ public class SocialConfig implements SocialConfigurer {
         return controller;
     }
 
-//    @Bean
-//    @Scope(value = "singleton", proxyMode = ScopedProxyMode.INTERFACES)
-//    public ConnectionFactoryLocator connectionFactoryLocator() {
-//        ConnectionFactoryRegistry registry = new ConnectionFactoryRegistry();
-//        FacebookConnectionFactory facebookConnectionFactory = getFacebookConnectionFactory();
-//        registry.addConnectionFactory(facebookConnectionFactory);
-//
-//        return registry;
-//    }
-//
-//    @Bean
-//    @Scope(value = "singleton", proxyMode = ScopedProxyMode.INTERFACES)
-//    public UsersConnectionRepository usersConnectionRepository() {
-//        return getUsersConnectionRepository(connectionFactoryLocator());
-//
-//    }
     protected FacebookConnectionFactory getFacebookConnectionFactory() {
         final FacebookConnectionFactory facebookConnectionFactory = new FacebookConnectionFactory("324403211086437", "48d13789f9af24d5eb4ab4e3c742f6cf");
         facebookConnectionFactory.setScope("email");
@@ -139,6 +95,9 @@ public class SocialConfig implements SocialConfigurer {
     @EnableWebMvc
     @Profile({"dev", "default"})
     public static class SocialConfigDev extends SocialConfig {
+
+        @Autowired
+        InMemoryUserDetailsManager auth;
 
         @Override
         public UsersConnectionRepository getUsersConnectionRepository(ConnectionFactoryLocator connectionFactoryLocator) {
@@ -173,16 +132,14 @@ public class SocialConfig implements SocialConfigurer {
         private DataSource dataSource;
         @Autowired
         UserService userService;
-        
-        @Autowired
-        TextEncryptor encryptor;
 
+//        @Autowired
+//        TextEncryptor encryptor;
         @Override
         public UsersConnectionRepository getUsersConnectionRepository(ConnectionFactoryLocator connectionFactoryLocator) {
-           
-            JdbcUsersConnectionRepository userRep = new JdbcUsersConnectionRepository( dataSource, connectionFactoryLocator,encryptor);
-            userRep.setConnectionSignUp(new ConnectionSignUp() {
 
+            JdbcUsersConnectionRepository userRep = new JdbcUsersConnectionRepository(dataSource, connectionFactoryLocator, textEncryptor());
+            userRep.setConnectionSignUp(new ConnectionSignUp() {
                 @Override
                 public String execute(Connection<?> cnctn) {
                     try {
@@ -194,7 +151,6 @@ public class SocialConfig implements SocialConfigurer {
                         log.error("SIGNUP", ex.toString(), ex);
                         throw new RuntimeException(ex);
                     }
-
                 }
             });
             return userRep;
@@ -202,11 +158,11 @@ public class SocialConfig implements SocialConfigurer {
 
         @Bean
         public TextEncryptor textEncryptor() {
-            return Encryptors.queryableText("qq", "qq");
+            return Encryptors.queryableText("AA", "AA");
         }
-        
+
         @Bean
-        public DataSource getDataSource(){
+        public DataSource getDataSource() {
             DriverManagerDataSource ds = new DriverManagerDataSource("jdbc:postgresql://localhost:5432/trdr", "trdr", "trdr");
             return ds;
         }

@@ -5,10 +5,6 @@
  */
 package com.mycompany.thymeleafspringapp.controller;
 
-import com.mycompany.thymeleafspringapp.model.Users;
-import com.mycompany.thymeleafspringapp.service.UserService;
-import java.util.List;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;

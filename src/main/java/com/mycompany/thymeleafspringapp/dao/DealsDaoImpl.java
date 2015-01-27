@@ -48,9 +48,10 @@ public class DealsDaoImpl implements DealsDAO {
     @Override
     public Deals getDeal(long dealId) {
         Criteria crit = sessionFactory.openSession().createCriteria(Deals.class);
-        crit.add(Restrictions.eq("deal_id", dealId));
+        crit.add(Restrictions.eq("dealId", dealId));
         crit.setMaxResults(1);
-        return (Deals) crit.list().get(0);
+        Deals d = (Deals) crit.list().get(0);
+        return d;
     }
 
     @Override
@@ -86,12 +87,21 @@ public class DealsDaoImpl implements DealsDAO {
             }
         }
     }
-
+    
     
 
     @Override
-    public Deals createDeal(Instruments instr,Users user, DealDirection direction, BigDecimal openPrice, Date openDate,String descr, Set<Tags> tags, Set<Screenshots> screenshots) {
-        return  new Deals(0, instr, user, direction==DealDirection.LONG?true:false, openPrice.doubleValue(), null, openDate, null,descr, screenshots, tags);
+    public Deals createDeal(Instruments instr, Users user, DealDirection direction, BigDecimal openPrice, Date openDate, String descr, Set<Tags> tags, Set<Screenshots> screenshots) {
+        return new Deals(0, instr, user, direction == DealDirection.LONG ? true : false, openPrice.doubleValue(), null, openDate, null, descr, screenshots, tags);
+    }
+
+    @Override
+    public byte[] getScreenshot( long imgId) {
+         Criteria crit = sessionFactory.openSession().createCriteria(Screenshots.class);
+        crit.add(Restrictions.eq("screenshotId", imgId));
+        crit.setMaxResults(1);
+        Screenshots s = (Screenshots)crit.list().get(0);
+        return s.getFile();
     }
 
 }
