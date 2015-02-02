@@ -45,11 +45,17 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
  * @author andrey
  */
 @Configuration
+@EnableSocial
 @EnableWebMvc
 public abstract class SocialConfig implements SocialConfigurer {
 
+    
+    
     Logger log = LoggerFactory.getLogger("SocialConfig");
 
+    @Autowired
+    SimpleSigninAdapter signinAdapter;
+    
     public SocialConfig() {
     }
 
@@ -63,7 +69,7 @@ public abstract class SocialConfig implements SocialConfigurer {
     public UserIdSource getUserIdSource() {
         return new AuthenticationNameUserIdSource();
     }
-    
+
     @Bean
     public ConnectController connectController(
             ConnectionFactoryLocator connectionFactoryLocator,
@@ -80,7 +86,7 @@ public abstract class SocialConfig implements SocialConfigurer {
         ProviderSignInController controller = new ProviderSignInController(
                 connectionFactoryLocator,
                 getUsersConnectionRepository(connectionFactoryLocator),
-                new SimpleSigninAdapter());
+                signinAdapter);
         return controller;
     }
 
@@ -133,8 +139,6 @@ public abstract class SocialConfig implements SocialConfigurer {
         @Autowired
         UserService userService;
 
-//        @Autowired
-//        TextEncryptor encryptor;
         @Override
         public UsersConnectionRepository getUsersConnectionRepository(ConnectionFactoryLocator connectionFactoryLocator) {
 
@@ -158,7 +162,10 @@ public abstract class SocialConfig implements SocialConfigurer {
 
         @Bean
         public TextEncryptor textEncryptor() {
-            return Encryptors.queryableText("AA", "AA");
+            
+            TextEncryptor enc=Encryptors.queryableText("password", "5c0744940b5c369b");
+            //TextEncryptor enc=Encryptors.noOpText();
+            return enc;
         }
 
         @Bean
