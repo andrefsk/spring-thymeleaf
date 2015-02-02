@@ -36,7 +36,7 @@ import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 public class AppConfig extends WebMvcConfigurerAdapter {
 
     public AppConfig() {
-    }
+    } 
 
     @Bean
     SpringResourceTemplateResolver getTemplateResolver() {

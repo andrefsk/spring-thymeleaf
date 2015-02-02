@@ -9,12 +9,12 @@ import com.mycompany.thymeleafspringapp.model.Deals;
 import com.mycompany.thymeleafspringapp.model.Users;
 import com.mycompany.thymeleafspringapp.service.DealsService;
 import java.io.IOException;
+import java.util.logging.Level;
 import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,19 +35,30 @@ public class DealsController {
 
     @RequestMapping(value = "/deals/{dealid}", method = RequestMethod.GET)
     public String getDeals(@PathVariable(value = "dealid") long dealId, Model model) {
+        try {
+            Users user
+                    = getUserDetails();
+            Deals d = ds.getDealById(user.getUserId(),dealId);
+            model.addAttribute("deal", d);
+            return "viewDeal";
+        } catch (IllegalAccessException ex) {
+            log.error("Acces denied.", ex);
+            return "redirect:/403";
+        }
+    }
+
+    private Users getUserDetails() {
         Users userDetails
                 = (Users) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        long userId=userDetails.getUserId();
-        log.info("User_id= "+userId);
-        Deals d = ds.getDealById(dealId);
-        model.addAttribute("deal", d);
-        return "viewDeal";
+        return userDetails;
     }
 
     @RequestMapping(value = "/deals/{dealid}/{imgid}", method = RequestMethod.GET)
     public void getImage(@PathVariable(value = "imgid") long imgId, @PathVariable(value = "dealid") long dealId, HttpServletResponse response) throws IOException {
+        Users user
+                = getUserDetails();
         response.setContentType("image/jpeg, image/jpg, image/png, image/gif");
-        response.getOutputStream().write(ds.getScreenshotById(imgId));
+        response.getOutputStream().write(ds.getScreenshotById(user.getUserId(),imgId));
         response.getOutputStream().close();
     }
 }

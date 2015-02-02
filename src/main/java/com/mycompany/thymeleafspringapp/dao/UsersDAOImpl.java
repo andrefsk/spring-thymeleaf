@@ -43,7 +43,7 @@ public class UsersDAOImpl implements UsersDAO {
     @Override
     public Users getUserById(long id) {
         Criteria crit = sessionFactory.openSession().createCriteria(Users.class);
-        crit.add(Restrictions.eq("user_id", id));
+        crit.add(Restrictions.eq("userId", id));
         crit.setMaxResults(1);
         return (Users) crit.list().get(0);
     }

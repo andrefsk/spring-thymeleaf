@@ -25,11 +25,11 @@ public class DealsService {
         return dealsDAO.getDeals(userId);
     }
     
-    public Deals getDealById(long dealId){
-        return dealsDAO.getDeal(dealId);
+    public Deals getDealById(long userId,long dealId) throws IllegalAccessException{
+        return dealsDAO.getDeal(userId,dealId);
     }
     
-    public byte[] getScreenshotById(long imgId){
-        return dealsDAO.getScreenshot(imgId);
+    public byte[] getScreenshotById(long userId,long imgId){
+        return dealsDAO.getScreenshot(userId,imgId);
     }
 }

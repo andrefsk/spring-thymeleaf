@@ -23,11 +23,11 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
  *
  * @author andrey
  */
+public class SecurityConfig {
 
-public class SecurityConfig{
+    public SecurityConfig() {
+    }
 
-    public SecurityConfig(){}
-    
     @Configuration
     @EnableWebMvcSecurity
     @Profile({"test", "production"})
@@ -54,7 +54,12 @@ public class SecurityConfig{
                     .and()
                     .logout()
                     .logoutUrl("/logout")
-                    .permitAll();
+                    .permitAll()
+                    .and()
+                    .rememberMe()
+                    .and()
+                    .exceptionHandling().accessDeniedPage("/403");
+
         }
 
         @Autowired
@@ -87,7 +92,6 @@ public class SecurityConfig{
         public SecurityConfigDev(boolean disableDefaults) {
             super(disableDefaults);
         }
-        
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
@@ -104,7 +108,9 @@ public class SecurityConfig{
                     .logoutUrl("/logout")
                     .permitAll()
                     .and()
-                    .rememberMe();
+                    .rememberMe()
+                    .and()
+                    .exceptionHandling().accessDeniedPage("/403");
             //   .and()
             //   .apply(new SpringSocialConfigurer());
         }
