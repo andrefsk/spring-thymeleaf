@@ -37,7 +37,7 @@ public class Tags  implements java.io.Serializable {
     public void setDeals(Deals deals) {
         this.deals = deals;
     }
-    public Serializable getTag() {
+    public String getTag() {
         return this.tag;
     }
     

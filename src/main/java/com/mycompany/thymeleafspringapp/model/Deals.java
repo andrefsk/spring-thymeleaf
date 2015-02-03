@@ -124,6 +124,16 @@ public class Deals  implements java.io.Serializable {
         return this.tagses;
     }
     
+    public Set getTagsNames() {
+        Set<String> result= new HashSet<>(); 
+        for(Object t:this.tagses){
+            Tags tag=(Tags)t;
+            result.add(tag.getTag());
+        }
+        return result;
+    }
+    
+    
     public void setTagses(Set tagses) {
         this.tagses = tagses;
     }

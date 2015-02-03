@@ -10,30 +10,45 @@ and open the template in the editor.
         <title>TODO supply a title</title>
         <link href="../../resources/css/bootstrap.min.css" rel="stylesheet" media="screen" th:href="@{/resources/css/bootstrap.min.css}"/>
         <link href="../../resources/css/blog.css" rel="stylesheet" th:href="@{/resources/css/blog.css}"/>
+        <link href="../../resources/css/bootstrap-tags.css" rel="stylesheet" th:href="@{/resources/css/bootstrap-tags.css}"/>
         <!-- Custom styles for this template -->
         <link href="blog.css" rel="stylesheet" />
+        <script src='../../resources/js/jquery-2.1.3.min.js' th:src="@{/resources/js/jquery-2.1.3.min.js}"></script>
+        <script src='../../resources/js/bootstrap-tags.min.js' th:src="@{/resources/js/bootstrap-tags.min.js}"></script>
     </head>
     <body>
         <div class="container">
             <div class="row">
-
                 <div class="col-sm-8 blog-main">
-
                     <div class="blog-post">
                         <span><img th:if="${deal.isLongDeal()} == true" src="../../resources/img/Stock_Index_Up.png" th:attr="src=@{/resources/img/Stock_Index_Up.png}" alt="long" class="img-thumbnail" /><img th:if="${deal.isLongDeal()} == false" src="../../resources/img/Stock_Index_Down.png" th:attr="src=@{/resources/img/Stock_Index_Down.png}" alt="short" class="img-thumbnail" /><h2 class="blog-post-title" th:text="${deal.getInstruments().getInstrumentName()}">instrument</h2></span>
                         <p class="blog-post-meta" th:text="${deal.getDateOpen()}">January 1, 2014 by <a th:text="${#authentication.name}" href="#">Mark</a></p>
+
+                        <p>Deal tags:</p>
+                        <div th:each="tag : ${deal.getTagses()}" class="tag-blog" th:text="${tag.getTag()}">tag_text</div>
+                        <hr/>
+                        <!--<div id="readOnly"></div>
+                        <script th:inline="javascript">
+                            /*<![CDATA[*/
+                            $(function() {
+                                // If using Bootstrap 2, be sure to include:
+                                // Tags.bootstrapVersion = "2";
+                                $("#readOnly").tags({
+                                    tagSize: "lg",
+                                    readOnly: true,
+                                    tagData: /*[[${deal.getTagsNames()}]]*/["boilerplate", "tags"]
+                                });
+                            });
+                            /*]]>*/
+                        </script>-->
                         <p th:text="${deal.getDescription()}">This is a deal description</p>
                         <hr/>
                     </div><!-- /.blog-post -->
-                    
-                        <!--<p>
-                            <img th:each="img : ${deal.getScreenshotses()}" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" th:attr="src=@{${baseUrl}+'/'+${img.getScreenshotId()}}" alt="image" class="img-thumbnail"/>
-                        </p>-->
-                        <ul class="thumbnails"  th:with="baseUrl='/deals/'+(${deal.dealId})">
-                            <li class="span3" th:each="img : ${deal.getScreenshotses()}">
-                                <a class="thumbnail" rel="lightbox[group]" th:href="@{${baseUrl}+'/'+${img.getScreenshotId()}}"><img class="group1" th:attr="src=@{${baseUrl}+'/'+${img.getScreenshotId()}}" /></a>
-                            </li> <!--end thumb -->
-                        </ul><!--end thumbnails -->
+                    <ul class="thumbnails"  th:with="baseUrl='/deals/'+(${deal.dealId})">
+                        <li class="span3" th:each="img : ${deal.getScreenshotses()}">
+                            <a class="thumbnail" rel="lightbox[group]" th:href="@{${baseUrl}+'/'+${img.getScreenshotId()}}"><img class="group1" th:attr="src=@{${baseUrl}+'/'+${img.getScreenshotId()}}" /></a>
+                        </li> <!--end thumb -->
+                    </ul><!--end thumbnails -->
 
                     <nav>
                         <ul class="pager">
@@ -78,5 +93,6 @@ and open the template in the editor.
 
             </div>
         </div>
+
     </body>
 </html>
