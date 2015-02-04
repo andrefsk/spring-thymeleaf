@@ -24,9 +24,27 @@ and open the template in the editor.
             <div class="row">
                 <div class="col-sm-8 blog-main">
                     <div class="blog-post">
-                        <span><img th:if="${deal.isLongDeal()} == true" src="../../resources/img/Stock_Index_Up.png" th:attr="src=@{/resources/img/Stock_Index_Up.png}" alt="long" class="img-thumbnail" /><img th:if="${deal.isLongDeal()} == false" src="../../resources/img/Stock_Index_Down.png" th:attr="src=@{/resources/img/Stock_Index_Down.png}" alt="short" class="img-thumbnail" /><h2 class="blog-post-title" th:text="${deal.getInstruments().getInstrumentName()}">instrument</h2></span>
+                        <h2 class="blog-post-title" th:text="${deal.getInstruments().getInstrumentName()}">instrument</h2>
                         <p class="blog-post-meta" th:text="${deal.getDateOpen()}">January 1, 2014 by <a th:text="${#authentication.name}" href="#">Mark</a></p>
-
+                        <div class="jumbotron">
+                            <div class="row">
+                                <div class="col-md-6 h1-deal"><span><span th:text="${deal.isLongDeal()} ? #{position.long} : #{position.short}">Long</span><img th:if="${deal.isLongDeal()} == true" src="../../resources/img/Stock_Index_Up.png" th:attr="src=@{/resources/img/Stock_Index_Up.png}" alt="long" class="img-thumbnail" /><img th:if="${deal.isLongDeal()} == false" src="../../resources/img/Stock_Index_Down.png" th:attr="src=@{/resources/img/Stock_Index_Down.png}" alt="short" class="img-thumbnail" /></span></div>
+                                <div class="col-md-6 h1-deal"><span>Status: <span th:text="${deal.getPriceClose()}!=null ? #{position.close} : #{position.open}">Close</span></span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-sm-6"><span>Open price: <span th:text="${deal.getPriceOpen()}">55,44</span></span></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6"><span>Close price: <span th:text="${deal.getPriceClose()}!=null ? ${deal.getPriceClose()}:#{position.na}">55,44</span></span></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="col-md-6 h1-deal"><span> Profit: <span th:text="${deal.getProfit()}!=null ? ${deal.getProfit()}: #{position.na}">Close</span></span></div>
+                                </div>
+                            </div>
+                        </div>
                         <p>Deal tags:</p>
                         <div th:each="tag : ${deal.getTagses()}" class="tag-blog" th:text="${tag.getTag()}">tag_text</div>
                         <hr/>
